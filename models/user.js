@@ -5,12 +5,16 @@ module.exports = function (sequelize, DataTypes) {
     return sequelize.define(
         'user',
         {
-            'username': {
+            'user_account': {
                 'type': DataTypes.STRING(45),
                 'allowNull': false
             },
-            'password': {
-                'type': DataTypes.STRING(125),
+            'user_password': {
+                'type': DataTypes.STRING(45),
+                'allowNull': false
+            },
+            'user_name': {
+                'type': DataTypes.STRING(45),
                 'allowNull': false
             }
         }

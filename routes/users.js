@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var UserModel = require('../models').User;
-var FollowerModel = require('../models').Follower;
-var FollowingModel = require('../models').Following;
 var sha1 = require('sha1');
 var md5 = require('md5');
 
