@@ -5,6 +5,12 @@ var sha1 = require('sha1');
 var md5 = require('md5');
 
 var KEY = 'airing';
+var MESSAGE = {
+    SUCCESS : '请求成功',
+    PARAMETER_ERROR : '参数错误',
+    USER_NOT_EXIST : '用户不存在',
+    PASSWORD_ERROR : '账号密码错误',
+}
 
 function getNowFormatDate() {
     var date = new Date();
@@ -41,55 +47,42 @@ router.post('/login', function (req, res, next) {
 
     var timestamp = new Date().getTime();
 
-    if (req.body.username == undefined || req.body.username == ''
-        || req.body.password == undefined || req.body.password == '') {
-        res.json({status: 1});
+    if (req.body.user_account == undefined || req.body.user_account == ''
+        || req.body.user_password == undefined || req.body.user_password == '') {
+        res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
 
     console.log('POST: users/login');
     console.log('TIME: ' + getNowFormatDate());
-    console.log('username: ' + req.body.username);
-    console.log('password: ' + req.body.password);
+    console.log('user_account: ' + req.body.user_account);
+    console.log('user_password: ' + req.body.user_password);
 
     var user = {
-        username: req.body.username,
-        password: sha1(req.body.password)
+        user_account: req.body.user_account,
+        user_password: sha1(req.body.user_password)
     };
     UserModel.findOne({
         where: {
-            username: user.username
+            user_account: user.user_account
         }
     }).then(function (user) {
         if (!user) {
-            return res.json({status: 1002});
+            return res.json({status: 1002, msg: MESSAGE.USER_NOT_EXIST});
         }
-        if (user.password !== req.body.password) {
-            return res.json({status: 1003});
+        if (user.user_password !== req.body.user_password) {
+            return res.json({status: 1003, msg: MESSAGE.PASSWORD_ERROR});
         }
         var token = md5(user.id + timestamp + KEY);
         var userData = {
             uid: user.id,
-            username: user.username,
+            user_name: user.user_name,
             token: token,
-            birthday: user.birthday,
-            career: user.career,
-            face_url: user.face_url,
-            follower: user.follower,
-            following: user.following,
-            hometown: user.hometown,
-            location: user.location,
-            phonenumber: user.phonenumber,
-            school: user.school,
-            sex: user.sex,
-            signature: user.signature,
-            tags: user.tags,
             created_at: user.createdAt,
             updated_at: timestamp
         };
-        res.json({status: 0, timestamp: timestamp, data: userData});
+        res.json({status: 0, timestamp: timestamp, data: userData, msg: MESSAGE.SUCCESS});
     });
 });
-
 
 module.exports = router;

@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
     return sequelize.define(
         'detail',
         {
-            'book_id': {
+            'bookId': {
                 'type': DataTypes.INTEGER,
                 'allowNull': false
             },
@@ -15,6 +15,10 @@ module.exports = function (sequelize, DataTypes) {
             },
             'detail_place': {
                 'type': DataTypes.STRING(45),
+                'allowNull': false
+            },
+            'is_borrowed': {
+                'type': DataTypes.BOOLEAN,
                 'allowNull': false
             }
         },

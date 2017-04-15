@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
     return sequelize.define(
         'list',
         {
-            'user_id': {
+            'userId': {
                 'type': DataTypes.INTEGER,
                 'allowNull': false
             },
