@@ -3,14 +3,8 @@ var router = express.Router();
 var UserModel = require('../models').User;
 var sha1 = require('sha1');
 var md5 = require('md5');
-
-var KEY = 'airing';
-var MESSAGE = {
-    SUCCESS : '请求成功',
-    PARAMETER_ERROR : '参数错误',
-    USER_NOT_EXIST : '用户不存在',
-    PASSWORD_ERROR : '账号密码错误',
-}
+var MESSAGE = require('./config').MESSAGE;
+var KEY = require('./config').KEY;
 
 function getNowFormatDate() {
     var date = new Date();
@@ -42,7 +36,7 @@ function getNowFormatDate() {
     return currentDate;
 }
 
-/* user login */
+/* users/login */
 router.post('/login', function (req, res, next) {
 
     var timestamp = new Date().getTime();
