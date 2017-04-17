@@ -66,4 +66,100 @@ router.post('/show_books', function (req, res, next) {
     return;
 });
 
+/* books/search_book */
+router.post('/search_book', function (req, res, next) {
+
+    var timestamp = new Date().getTime();
+
+    if (req.body.content == undefined || req.body.content == ''
+        || req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.uid == undefined || req.body.uid == ''
+        || req.body.type == undefined || req.body.type == '') {
+        res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+        return;
+    }
+
+    console.log('POST: books/search_book');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('page: ' + req.body.page);
+    console.log('timestamp: ' + req.body.timestamp);
+	console.log('token: ' + req.body.token);
+    console.log('uid: ' + req.body.uid);
+    console.log('content: ' + req.body.content);
+    console.log('type: ' + req.body.type);
+
+    if (type == 0) {
+    	BookModel.findAll({
+    		where: {
+            	book_title: {
+            		'$like': '%' + req.body.content + '%', 
+        		}
+        	}
+    	}).then(function (result) {
+    		var books = [];
+    		result.forEach(function (book) {
+	            var bookData = {};
+	            bookData.book_id = book.id;
+	            bookData.book_cover = book.book_cover;
+	            bookData.book_author = book.book_author;
+	            bookData.book_last_number = book.book_last_number;
+	            bookData.book_rate = book.book_rate;
+	            bookData.book_publish = book.book_publish;
+	            bookData.book_title = book.book_title;
+	            books.push(bookData);
+	        });
+            res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
+    	}).catch(next);
+		return;
+    } else if (type == 1) {
+    	BookModel.findAll({
+    		where: {
+            	book_author: {
+            		'$like': '%' + req.body.content + '%', 
+        		}
+        	}
+    	}).then(function (result) {
+    		var books = [];
+    		result.forEach(function (book) {
+	            var bookData = {};
+	            bookData.book_id = book.id;
+	            bookData.book_cover = book.book_cover;
+	            bookData.book_author = book.book_author;
+	            bookData.book_last_number = book.book_last_number;
+	            bookData.book_rate = book.book_rate;
+	            bookData.book_publish = book.book_publish;
+	            bookData.book_title = book.book_title;
+	            books.push(bookData);
+	        });
+            res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
+        });
+    	}).catch(next);
+    	return;
+    } else if (type == 2) {
+    	BookModel.findAll({
+    		where: {
+            	book_publish: {
+            		'$like': '%' + req.body.content + '%', 
+        		}
+        	}
+    	}).then(function (result) {
+    		var books = [];
+    		result.forEach(function (book) {
+	            var bookData = {};
+	            bookData.book_id = book.id;
+	            bookData.book_cover = book.book_cover;
+	            bookData.book_author = book.book_author;
+	            bookData.book_last_number = book.book_last_number;
+	            bookData.book_rate = book.book_rate;
+	            bookData.book_publish = book.book_publish;
+	            bookData.book_title = book.book_title;
+	            books.push(bookData);
+	        });
+            res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
+    	}).catch(next);
+    	return;
+    }
+});
+
 module.exports = router;
