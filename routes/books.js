@@ -3,6 +3,7 @@ var router = express.Router();
 var UserModel = require('../models').User;
 var BookModel = require('../models').Book;
 var ListModel = require('../models').List;
+var DetailModel = require('../models').Detail;
 var MESSAGE = require('./config').MESSAGE;
 var KEY = require('./config').KEY;
 
@@ -82,7 +83,6 @@ router.post('/search_book', function (req, res, next) {
 
     console.log('POST: books/search_book');
     console.log('TIME: ' + getNowFormatDate());
-    console.log('page: ' + req.body.page);
     console.log('timestamp: ' + req.body.timestamp);
 	console.log('token: ' + req.body.token);
     console.log('uid: ' + req.body.uid);
@@ -160,6 +160,56 @@ router.post('/search_book', function (req, res, next) {
     	}).catch(next);
     	return;
     }
+    return;
+});
+
+/* books/show_detail */
+router.post('/show_detail', function (req, res, next) {
+
+    var timestamp = new Date().getTime();
+
+    if (req.body.book_id == undefined || req.body.book_id == ''
+        || req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.uid == undefined || req.body.uid == '') {
+        res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+        return;
+    }
+
+    console.log('POST: books/show_detail');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('timestamp: ' + req.body.timestamp);
+	console.log('token: ' + req.body.token);
+    console.log('uid: ' + req.body.uid);
+    console.log('book_id: ' + req.body.book_id);
+
+    BookModel.findOne({
+    	include:[DetailModel],
+    	where: {
+    		book_id: req.body.book_id
+    	}
+    }).then(function (result) {
+    	var book = {};
+    	book.book_author = result.book_author;
+    	book.book_content = result.book_content;
+    	book.book_cover = result.book_cover;
+    	book.book_id = result.id;
+    	book.book_key = result.book_key;
+    	book.book_last_number = result.book_last_number;
+    	book.book_place = result.book_place;
+    	book.book_publish = result.book_publish;
+    	book.book_rate = result.book_rate;
+    	book.book_title = result.book_title;
+    	book.is_subscribe = 0;
+    	book.detail_data = {};
+    	book.detail_data.detail_id = result.detail_data.id;
+    	book.detail_data.detail_key = result.detail_data.detail_key;
+    	book.detail_data.detail_place = result.detail_data.detail_place;
+    	book.detail_data.is_borrowed = result.detail_data.is_borrowed;
+    	return res.json({status: 0, msg: MESSAGE.SUCCESS, data: book});
+    }).catch(next);
+
+    return;
 });
 
 module.exports = router;
