@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
                 'type': DataTypes.INTEGER,
                 'allowNull': false
             },
-            'list_title': {
+            'list_name': {
                 'type': DataTypes.STRING(45),
                 'allowNull': false
             },
