@@ -1,0 +1,28 @@
+{
+	"apps": [
+		{
+			"name": "1ibrary",
+			"script": "app.js",
+			"env": {
+				"COMMON_VARIABLE": "true"
+			},
+			"env_production": {
+				"NODE_ENV": "production"
+			}
+		}
+	],
+	"deploy": {
+		"production": {
+			"user": "airing",
+			"host": ["121.42.167.55"],
+			"port": "39999",
+			"ref": "origin/master",
+			"repo": "git@github.com:1ibrary/1ibrary-back-end.git",
+			"path": "/www/website/production",
+			"ssh_options": "StrictHostKeyChecking=no",
+			"env": {
+				"NODE_ENV": "production"
+			}
+		}
+	}
+}
