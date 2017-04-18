@@ -133,8 +133,7 @@ router.post('/search_book', function (req, res, next) {
 	            books.push(bookData);
 	        });
             res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
-        });
-    	}).catch(next);
+        }).catch(next);
     	return;
     } else if (type == 2) {
     	BookModel.findAll({
