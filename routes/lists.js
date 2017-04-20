@@ -46,4 +46,45 @@ router.post('/create_list', function (req, res, next) {
     return;
 });
 
+/* lists/show_list */
+router.post('/show_list', function (req, res, next) {
+
+    var timestamp = new Date().getTime();
+
+    if (req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.uid == undefined || req.body.uid == '') {
+        res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+        return;
+    }
+
+    console.log('POST: lists/show_list');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('timestamp: ' + req.body.timestamp);
+    console.log('token: ' + req.body.token);
+    console.log('uid: ' + req.body.uid);
+
+    var lists = [];
+
+    ListModel.findAll({
+        include: [UserModel],
+        where: {
+            userId: req.body.uid
+        }
+    }).then(function (result) {
+        result.forEach(function (list) {
+            var data = {};
+            data.list_id = list.id;
+            data.list_content = list.list_content;
+            data.list_name = list.list_name;
+
+            lists.push(data);    
+        });
+        return res.json({status: 0, msg: MESSAGE.SUCCESS, data: lists});
+    })
+
+    return;
+});
+
+
 module.exports = router;
