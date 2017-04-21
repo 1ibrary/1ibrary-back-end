@@ -7,6 +7,36 @@ var DetailModel = require('../models').Detail;
 var MESSAGE = require('./config').MESSAGE;
 var KEY = require('./config').KEY;
 
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    var strHours = date.getHours();
+    var strMinutes = date.getMinutes();
+    var strSeconds = date.getSeconds();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    if (strHours >= 0 && strHours <= 9) {
+        strHours = "0" + strHours;
+    }
+    if (strMinutes >= 0 && strMinutes <= 9) {
+        strMinutes = "0" + strMinutes;
+    }
+    if (strSeconds >= 0 && strSeconds <= 9) {
+        strSeconds = "0" + strSeconds;
+    }
+    var currentDate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+        + 'T' + strHours + seperator2 + strMinutes
+        + seperator2 + strSeconds + '.000Z';
+    return currentDate;
+}
+
 /* books/show_books */
 router.post('/show_books', function (req, res, next) {
 
@@ -29,7 +59,7 @@ router.post('/show_books', function (req, res, next) {
 
     BookModel.findAll({}).then(function (result) {
     	var totalPages = 0;
-        var pageSize = 10;
+        var pageSize = 5;
         var num = result.length;
         
         if (num / pageSize > parseInt(num / pageSize)) {
@@ -38,7 +68,7 @@ router.post('/show_books', function (req, res, next) {
             totalPages = parseInt(num / pageSize);
         }
 
-        var currentPage = req.body.pages;
+        var currentPage = req.body.page;
         var startRow = (currentPage - 1) * pageSize;
         var endRow = currentPage * pageSize;
         endRow = (endRow > num) ? num : endRow;
@@ -47,6 +77,7 @@ router.post('/show_books', function (req, res, next) {
         var i = 0;
 
         result.forEach(function (book) {
+        	
             var bookData = {};
             bookData.book_id = book.id;
             bookData.book_cover = book.book_cover;
@@ -54,9 +85,8 @@ router.post('/show_books', function (req, res, next) {
             bookData.book_last_number = book.book_last_number;
             bookData.book_rate = book.book_rate;
             bookData.book_publish = book.book_publish;
-            bookData.book_title = book.book_title;
-
-            if (i >= startRow && i <= endRow) {
+            bookData.book_title = book.book_title;       
+            if (i >= startRow && i < endRow) {
                 books.push(bookData);
             }
             i++;
@@ -133,7 +163,7 @@ router.post('/search_book', function (req, res, next) {
 	            books.push(bookData);
 	        });
             res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
-        }).catch(next);
+        });
     	return;
     } else if (type == 2) {
     	BookModel.findAll({
