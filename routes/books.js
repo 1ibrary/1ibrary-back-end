@@ -119,7 +119,7 @@ router.post('/search_book', function (req, res, next) {
     console.log('content: ' + req.body.content);
     console.log('type: ' + req.body.type);
 
-    if (type == 0) {
+    if (req.body.type == 0) {
     	BookModel.findAll({
     		where: {
             	book_title: {
@@ -142,7 +142,7 @@ router.post('/search_book', function (req, res, next) {
             res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
     	}).catch(next);
 		return;
-    } else if (type == 1) {
+    } else if (req.body.type == 1) {
     	BookModel.findAll({
     		where: {
             	book_author: {
@@ -165,7 +165,7 @@ router.post('/search_book', function (req, res, next) {
             res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
         });
     	return;
-    } else if (type == 2) {
+    } else if (req.body.type == 2) {
     	BookModel.findAll({
     		where: {
             	book_publish: {
@@ -215,9 +215,10 @@ router.post('/show_detail', function (req, res, next) {
     BookModel.findOne({
     	include:[DetailModel],
     	where: {
-    		book_id: req.body.book_id
+    		id: req.body.book_id
     	}
     }).then(function (result) {
+    	console.log(result)
     	var book = {};
     	book.book_author = result.book_author;
     	book.book_content = result.book_content;
@@ -230,11 +231,8 @@ router.post('/show_detail', function (req, res, next) {
     	book.book_rate = result.book_rate;
     	book.book_title = result.book_title;
     	book.is_subscribe = 0;
-    	book.detail_data = {};
-    	book.detail_data.detail_id = result.detail_data.id;
-    	book.detail_data.detail_key = result.detail_data.detail_key;
-    	book.detail_data.detail_place = result.detail_data.detail_place;
-    	book.detail_data.is_borrowed = result.detail_data.is_borrowed;
+    	book.detail_data = result.details;
+
     	return res.json({status: 0, msg: MESSAGE.SUCCESS, data: book});
     }).catch(next);
 
