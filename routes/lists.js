@@ -158,7 +158,7 @@ router.post('/show_detail', function (req, res, next) {
     if (req.body.timestamp == undefined || req.body.timestamp == ''
         || req.body.token == undefined || req.body.token == ''
         || req.body.uid == undefined || req.body.uid == ''
-        || req.body.list_id == undefined || req.body.list_id == '') {
+        || req.body.book_list == undefined || req.body.book_list == '') {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
@@ -168,8 +168,29 @@ router.post('/show_detail', function (req, res, next) {
     console.log('timestamp: ' + req.body.timestamp);
     console.log('token: ' + req.body.token);
     console.log('uid: ' + req.body.uid);
-    console.log('list_id: ' + req.body.list_id);
-});
+    console.log('book_list: ' + req.body.book_list);
 
+    BookModel.findAll({
+        where: {
+            id: req.body.book_list.split(',')
+        }
+    }).then(function (result) {
+
+        var books = [];
+
+        result.forEach(function (book) {
+            var bookData = {};
+            bookData.book_id = book.id;
+            bookData.book_cover = book.book_cover;
+            bookData.book_author = book.book_author;
+            bookData.book_last_number = book.book_last_number;
+            bookData.book_rate = book.book_rate;
+            bookData.book_publish = book.book_publish;
+            bookData.book_title = book.book_title;       
+            books.push(bookData);
+        });
+        res.json({status: 0, data: books, msg: MESSAGE.SUCCESS});
+    })
+});
 
 module.exports = router;
