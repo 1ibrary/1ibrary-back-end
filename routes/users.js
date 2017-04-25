@@ -80,3 +80,44 @@ router.post('/login', function (req, res, next) {
 });
 
 module.exports = router;
+
+/* users/feedback */
+router.post('/feedback', function (req, res, next) {
+
+    var timestamp = new Date().getTime();
+
+    if (req.body.uid == undefined || req.body.uid == ''
+        || req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.contact == undefined || req.body.contact == ''
+        || req.body.content == undefined || req.body.content == '') {
+        res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+        return;
+    }
+
+    console.log('POST: users/feedback');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('uid: ' + req.body.uid);
+    console.log('timestamp: ' + req.body.timestamp);
+    console.log('token: ' + req.body.token);
+    console.log('contact: ' + req.body.contact);
+    console.log('content: ' + req.body.content);
+
+    var feedback = {
+        contact: req.body.contact,
+        content: req.body.content
+    };
+    UserModel.findOne({
+        where: {
+            id: req.body.uid
+        }
+    }).then(function (user) {
+        if (!user) {
+            return res.json({status: 1002, msg: MESSAGE.USER_NOT_EXIST});
+        }
+        user.createFeedback(feedback);
+        res.json({status: 0, msg: MESSAGE.SUCCESS});
+    });
+});
+
+module.exports = router;
