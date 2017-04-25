@@ -16,6 +16,10 @@ module.exports = function (sequelize, DataTypes) {
             'list_content': {
                 'type': DataTypes.TEXT,
                 'allowNull': true
+            },
+            'book_list': {
+                'type': DataTypes.TEXT,
+                'allowNull': true
             }
         },
         {

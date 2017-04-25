@@ -61,7 +61,8 @@ router.post('/create_list', function (req, res, next) {
 
     var list = {
     	list_name: req.body.list_name,
-    	list_content: req.body.list_content
+    	list_content: req.body.list_content,
+        book_list: '[]'
     }
 
     UserModel.findOne({
@@ -107,13 +108,46 @@ router.post('/show_list', function (req, res, next) {
             data.list_id = list.id;
             data.list_content = list.list_content;
             data.list_name = list.list_name;
-
+            data.book_list = list.book_list;
             lists.push(data);    
         });
         return res.json({status: 0, msg: MESSAGE.SUCCESS, data: lists});
     })
 
     return;
+});
+
+/* lists/collect_book */
+router.post('/collect_book', function (req, res, next) {
+
+    var timestamp = new Date().getTime();
+
+    if (req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.uid == undefined || req.body.uid == ''
+        || req.body.list_id == undefined || req.body.list_id == ''
+        || req.body.book_list == undefined || req.body.book_list == '') {
+        res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+        return;
+    }
+
+    console.log('POST: lists/collect_book');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('timestamp: ' + req.body.timestamp);
+    console.log('token: ' + req.body.token);
+    console.log('uid: ' + req.body.uid);
+    console.log('list_id: ' + req.body.list_id);
+    console.log('book_id: ' + req.body.book_list);
+
+    ListModel.update({
+        book_list: req.body.book_list
+    },{
+        where: {
+            id: req.body.list_id
+        }
+    }).then(function (result) {
+        return res.json({status: 0, msg: MESSAGE.SUCCESS});
+    })
 });
 
 /* lists/show_detail */
@@ -135,28 +169,6 @@ router.post('/show_detail', function (req, res, next) {
     console.log('token: ' + req.body.token);
     console.log('uid: ' + req.body.uid);
     console.log('list_id: ' + req.body.list_id);
-
-
-    var lists = [];
-
-    ListModel.findAll({
-        include: [UserModel],
-        where: {
-            userId: req.body.uid
-        }
-    }).then(function (result) {
-        result.forEach(function (list) {
-            var data = {};
-            data.list_id = list.id;
-            data.list_content = list.list_content;
-            data.list_name = list.list_name;
-
-            lists.push(data);    
-        });
-        return res.json({status: 0, msg: MESSAGE.SUCCESS, data: lists});
-    })
-
-    return;
 });
 
 
