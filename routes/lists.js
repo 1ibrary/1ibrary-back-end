@@ -214,7 +214,40 @@ router.post('/remove_list', function (req, res, next) {
     ListModel.destroy({
         where: {
             id: req.body.list_id,
-            userId: req.body.uid
+        }
+    }).then(function (result) {
+        res.json({status: 0, msg: MESSAGE.SUCCESS})
+    }).catch(next)
+
+    return;
+});
+
+/* lists/update_list */
+router.post('/update_list', function (req, res, next) {
+
+    if (req.body.list_id == undefined || req.body.list_id == ''
+        || req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.uid == undefined || req.body.uid == ''
+        || req.body.book_list == undefined || req.body.book_list == '') {
+
+        return res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+    }
+
+    console.log('POST: lists/update_list');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('uid: ' + req.body.uid);
+    console.log('token: ' + req.body.token);
+    console.log('timestamp: ' + req.body.timestamp);
+    console.log('list_id: ' + req.body.list_id);
+    console.log('book_list: ' + req.body.book_list);
+
+    ListModel.update(
+    {
+        book_list: req.body.book_list
+    },{
+        where: {
+            id: req.body.list_id,
         }
     }).then(function (result) {
         res.json({status: 0, msg: MESSAGE.SUCCESS})
