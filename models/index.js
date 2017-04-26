@@ -8,9 +8,11 @@ var Feedback = sequelize.import('./feedback');
 
 User.hasMany(List, {foreignKey: 'userId', targetKey: 'userId'});
 Book.hasMany(Detail, {foreignKey: 'bookId', targetKey: 'bookId'});
+User.hasMany(Feedback, {foreignKey: 'userId', targetKey: 'userId'});
 
 List.belongsTo(User);
 Detail.belongsTo(Book);
+Feedback.belongsTo(User);
 
 sequelize.sync();
 

@@ -119,7 +119,7 @@ router.post('/feedback', function (req, res, next) {
         }
         user.createFeedback(feedback);
         res.json({status: 0, msg: MESSAGE.SUCCESS});
-    });
+    }).catch(next);;
 });
 
 module.exports = router;
