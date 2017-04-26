@@ -59,7 +59,7 @@ router.post('/show_books', function (req, res, next) {
 
     BookModel.findAll({}).then(function (result) {
     	var totalPages = 0;
-        var pageSize = 5;
+        var pageSize = 10;
         var num = result.length;
         
         if (num / pageSize > parseInt(num / pageSize)) {

@@ -16,6 +16,10 @@ module.exports = function (sequelize, DataTypes) {
             'user_name': {
                 'type': DataTypes.STRING(45),
                 'allowNull': false
+            },
+            'user_sex': {
+                'type': DataTypes.INTEGER,
+                'allowNull': true
             }
         }
     );

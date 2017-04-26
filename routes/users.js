@@ -71,6 +71,7 @@ router.post('/login', function (req, res, next) {
         var userData = {
             uid: user.id,
             user_name: user.user_name,
+            user_sex: user.user_sex,
             token: token,
             created_at: user.createdAt,
             updated_at: timestamp,
