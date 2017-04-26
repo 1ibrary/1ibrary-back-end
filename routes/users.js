@@ -73,9 +73,10 @@ router.post('/login', function (req, res, next) {
             user_name: user.user_name,
             token: token,
             created_at: user.createdAt,
-            updated_at: timestamp
+            updated_at: timestamp,
+            timestamp: timestamp
         };
-        res.json({status: 0, timestamp: timestamp, data: userData, msg: MESSAGE.SUCCESS});
+        res.json({status: 0, data: userData, msg: MESSAGE.SUCCESS});
     });
 });
 

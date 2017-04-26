@@ -193,4 +193,34 @@ router.post('/show_detail', function (req, res, next) {
     })
 });
 
+/* lists/remove_list */
+router.post('/remove_list', function (req, res, next) {
+
+    if (req.body.list_id == undefined || req.body.list_id == ''
+        || req.body.timestamp == undefined || req.body.timestamp == ''
+        || req.body.token == undefined || req.body.token == ''
+        || req.body.uid == undefined || req.body.uid == '') {
+
+        return res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
+    }
+
+    console.log('POST: lists/remove_list');
+    console.log('TIME: ' + getNowFormatDate());
+    console.log('uid: ' + req.body.uid);
+    console.log('token: ' + req.body.token);
+    console.log('timestamp: ' + req.body.timestamp);
+    console.log('list_id: ' + req.body.list_id);
+
+    ListModel.destroy({
+        where: {
+            id: req.body.list_id,
+            userId: req.body.uid
+        }
+    }).then(function (result) {
+        res.json({status: 0, msg: MESSAGE.SUCCESS})
+    }).catch(next)
+
+    return;
+});
+
 module.exports = router;
