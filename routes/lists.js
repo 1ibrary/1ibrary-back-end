@@ -242,9 +242,15 @@ router.post('/update_list', function (req, res, next) {
     console.log('list_id: ' + req.body.list_id);
     console.log('book_list: ' + req.body.book_list);
 
+    var book_list = req.body.book_list;
+
+    if (req.body.book_list == '[]') {
+        book_list = ''
+    }
+
     ListModel.update(
     {
-        book_list: req.body.book_list
+        book_list: book_list
     },{
         where: {
             id: req.body.list_id,
