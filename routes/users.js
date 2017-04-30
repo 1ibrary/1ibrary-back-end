@@ -81,8 +81,6 @@ router.post('/login', function (req, res, next) {
     });
 });
 
-module.exports = router;
-
 /* users/feedback */
 router.post('/feedback', function (req, res, next) {
 
