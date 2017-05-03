@@ -1,6 +1,6 @@
 {
-  "name": "rideread",
-  "version": "0.0.0",
+  "name": "oneLibrary",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
