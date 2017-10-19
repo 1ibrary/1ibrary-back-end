@@ -6,36 +6,7 @@ var ListModel = require('../models').List;
 var DetailModel = require('../models').Detail;
 var MESSAGE = require('./config').MESSAGE;
 var KEY = require('./config').KEY;
-
-function getNowFormatDate() {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    var strHours = date.getHours();
-    var strMinutes = date.getMinutes();
-    var strSeconds = date.getSeconds();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    if (strHours >= 0 && strHours <= 9) {
-        strHours = "0" + strHours;
-    }
-    if (strMinutes >= 0 && strMinutes <= 9) {
-        strMinutes = "0" + strMinutes;
-    }
-    if (strSeconds >= 0 && strSeconds <= 9) {
-        strSeconds = "0" + strSeconds;
-    }
-    var currentDate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-        + 'T' + strHours + seperator2 + strMinutes
-        + seperator2 + strSeconds + '.000Z';
-    return currentDate;
-}
+var getNowFormatDate = require('./config').getNowFormatDate;
 
 /* lists/create_list */
 router.post('/create_list', function (req, res, next) {
@@ -50,14 +21,6 @@ router.post('/create_list', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: lists/create_list');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('list_content: ' + req.body.list_content);
-    console.log('timestamp: ' + req.body.timestamp);
-	console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
-    console.log('list_name: ' + req.body.list_name);
 
     var list = {
     	list_name: req.body.list_name,
@@ -88,12 +51,6 @@ router.post('/show_list', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: lists/show_list');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('timestamp: ' + req.body.timestamp);
-    console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
 
     var lists = [];
 
@@ -131,14 +88,6 @@ router.post('/collect_book', function (req, res, next) {
         return;
     }
 
-    console.log('POST: lists/collect_book');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('timestamp: ' + req.body.timestamp);
-    console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
-    console.log('list_id: ' + req.body.list_id);
-    console.log('book_id: ' + req.body.book_list);
-
     ListModel.update({
         book_list: req.body.book_list
     },{
@@ -162,13 +111,6 @@ router.post('/show_detail', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: lists/show_detail');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('timestamp: ' + req.body.timestamp);
-    console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
-    console.log('book_list: ' + req.body.book_list);
 
     BookModel.findAll({
         where: {
@@ -204,13 +146,6 @@ router.post('/remove_list', function (req, res, next) {
         return res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
     }
 
-    console.log('POST: lists/remove_list');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('uid: ' + req.body.uid);
-    console.log('token: ' + req.body.token);
-    console.log('timestamp: ' + req.body.timestamp);
-    console.log('list_id: ' + req.body.list_id);
-
     ListModel.destroy({
         where: {
             id: req.body.list_id,
@@ -233,14 +168,6 @@ router.post('/update_list', function (req, res, next) {
 
         return res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
     }
-
-    console.log('POST: lists/update_list');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('uid: ' + req.body.uid);
-    console.log('token: ' + req.body.token);
-    console.log('timestamp: ' + req.body.timestamp);
-    console.log('list_id: ' + req.body.list_id);
-    console.log('book_list: ' + req.body.book_list);
 
     var book_list = req.body.book_list;
 

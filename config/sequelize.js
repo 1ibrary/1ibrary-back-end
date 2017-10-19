@@ -4,5 +4,5 @@
 var Sequelize = require('sequelize');
 
 exports.sequelize = function () {
-	return new Sequelize('1ibrary', 'root', '', {'dialect': 'mysql',host: 'localhost', port:3306});
+	return new Sequelize('plant', 'root', '', {'dialect': 'mysql',host: 'localhost', port:3306});
 }

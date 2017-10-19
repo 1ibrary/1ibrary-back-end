@@ -6,36 +6,7 @@ var ListModel = require('../models').List;
 var DetailModel = require('../models').Detail;
 var MESSAGE = require('./config').MESSAGE;
 var KEY = require('./config').KEY;
-
-function getNowFormatDate() {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    var strHours = date.getHours();
-    var strMinutes = date.getMinutes();
-    var strSeconds = date.getSeconds();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    if (strHours >= 0 && strHours <= 9) {
-        strHours = "0" + strHours;
-    }
-    if (strMinutes >= 0 && strMinutes <= 9) {
-        strMinutes = "0" + strMinutes;
-    }
-    if (strSeconds >= 0 && strSeconds <= 9) {
-        strSeconds = "0" + strSeconds;
-    }
-    var currentDate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-        + 'T' + strHours + seperator2 + strMinutes
-        + seperator2 + strSeconds + '.000Z';
-    return currentDate;
-}
+var getNowFormatDate = require('./config').getNowFormatDate;
 
 /* books/show_books */
 router.post('/show_books', function (req, res, next) {
@@ -49,13 +20,6 @@ router.post('/show_books', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: books/show_books');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('page: ' + req.body.page);
-    console.log('timestamp: ' + req.body.timestamp);
-	console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
 
     BookModel.findAll({}).then(function (result) {
     	var totalPages = 0;
@@ -110,14 +74,6 @@ router.post('/search_book', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: books/search_book');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('timestamp: ' + req.body.timestamp);
-	console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
-    console.log('content: ' + req.body.content);
-    console.log('type: ' + req.body.type);
 
     if (req.body.type == 0) {
     	BookModel.findAll({
@@ -205,13 +161,6 @@ router.post('/show_detail', function (req, res, next) {
         return;
     }
 
-    console.log('POST: books/show_detail');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('timestamp: ' + req.body.timestamp);
-	console.log('token: ' + req.body.token);
-    console.log('uid: ' + req.body.uid);
-    console.log('book_id: ' + req.body.book_id);
-
     BookModel.findOne({
     	include:[DetailModel],
     	where: {
@@ -226,7 +175,7 @@ router.post('/show_detail', function (req, res, next) {
     	book.book_id = result.id;
     	book.book_key = result.book_key;
     	book.book_last_number = result.book_last_number;
-    	book.book_place = result.book_place;
+    	book.book_place = '¥36.5';
     	book.book_publish = result.book_publish;
     	book.book_rate = result.book_rate;
     	book.book_title = result.book_title;

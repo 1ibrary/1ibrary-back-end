@@ -5,36 +5,7 @@ var sha1 = require('sha1');
 var md5 = require('md5');
 var MESSAGE = require('./config').MESSAGE;
 var KEY = require('./config').KEY;
-
-function getNowFormatDate() {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    var strHours = date.getHours();
-    var strMinutes = date.getMinutes();
-    var strSeconds = date.getSeconds();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    if (strHours >= 0 && strHours <= 9) {
-        strHours = "0" + strHours;
-    }
-    if (strMinutes >= 0 && strMinutes <= 9) {
-        strMinutes = "0" + strMinutes;
-    }
-    if (strSeconds >= 0 && strSeconds <= 9) {
-        strSeconds = "0" + strSeconds;
-    }
-    var currentDate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-        + 'T' + strHours + seperator2 + strMinutes
-        + seperator2 + strSeconds + '.000Z';
-    return currentDate;
-}
+var getNowFormatDate = require('./config').getNowFormatDate;
 
 /* users/login */
 router.post('/login', function (req, res, next) {
@@ -46,11 +17,6 @@ router.post('/login', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: users/login');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('user_account: ' + req.body.user_account);
-    console.log('user_password: ' + req.body.user_password);
 
     var user = {
         user_account: req.body.user_account,
@@ -94,14 +60,6 @@ router.post('/feedback', function (req, res, next) {
         res.json({status: 1, msg: MESSAGE.PARAMETER_ERROR});
         return;
     }
-
-    console.log('POST: users/feedback');
-    console.log('TIME: ' + getNowFormatDate());
-    console.log('uid: ' + req.body.uid);
-    console.log('timestamp: ' + req.body.timestamp);
-    console.log('token: ' + req.body.token);
-    console.log('contact: ' + req.body.contact);
-    console.log('content: ' + req.body.content);
 
     var feedback = {
         contact: req.body.contact,
